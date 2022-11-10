@@ -1,4 +1,8 @@
 ﻿
+string mainMenuOption = "";
+bool showMainMenuAgain = true;
+string option = "";
+bool showAssetMenuAgain = true;
 
 
 Assets p1 = new Phone("Phone", "Iphone", "8", "Spain", 12292018, 970, "EUR", 801.65);
@@ -12,6 +16,23 @@ assets.Add(c1);
 assets.Add(p2);
 assets.Add(p3);
 
+
+void ShowMainMenu()
+{
+    Console.WriteLine("Asset Tracking Menu");
+    Console.WriteLine("To Add a New Asset - enter \"N\"");
+    Console.WriteLine("To See Asset List - enter \"L\"");
+    Console.WriteLine("To Exit - enter \"Q\"");
+    mainMenuOption = Console.ReadLine();
+}
+
+void ShowAddAssetMenu()
+{
+    Console.WriteLine("Add New Asset");
+    Console.WriteLine("Select Type: \"P\" for Phone, \"C\" for Computer or \"Q\" to Exit");
+    option = Console.ReadLine();
+}
+
 void CreateNewPhone()
 {
     string type = "Phone";
@@ -22,23 +43,46 @@ void CreateNewPhone()
     Console.WriteLine("Enter Phone Model:");
     string model = Console.ReadLine();
 
-    Console.WriteLine("In which office is the phone in?");
-    string office = Console.ReadLine();
-
     Console.WriteLine("Enter Purchase Date:");
     int purchaseDate = Convert.ToInt32(Console.ReadLine());
 
     Console.WriteLine("Enter Price in USD:");
     double price = Convert.ToDouble(Console.ReadLine());
 
-    Console.WriteLine("Enter Local Currency ( EUR / SEK / USD )");
-    string currency = Console.ReadLine();
+    Console.WriteLine("In which office is the phone in?");
+    Console.WriteLine("Enter \"Sw\" for Sweden, \"Sp\" for Spain or \"U\" for USA" );
+    double localPrice = 0;
+    string currency = "";
+    string office = Console.ReadLine();
+        if (office.ToLower().Trim() == "sw")
+        {
+            office = "Sweden";
+            currency = "SEK";
+            localPrice = price * 10.89;
+        }
+        else if (office.ToLower().Trim() == "sp")
+        {
+            office = "Spain";
+            currency = "EUR";
+            localPrice = price * 0.99;
+        }
+        else if (office.ToLower().Trim() == "u")
+        {
+            office = "USA";
+            currency = "USD";
+            localPrice = price;
+        }
+        else
+        {
+            Console.WriteLine("Not a valid office");
+            AddNewAsset();
+        }
 
-    Console.WriteLine("Enter the Local Price Today:");
-    double localPrice = Convert.ToDouble(Console.ReadLine());
 
     assets.Add(new Phone(type, brand, model, office, purchaseDate, price, currency, localPrice));
+
 }
+
 
 void CreateNewComputer()
 {
@@ -68,35 +112,80 @@ void CreateNewComputer()
     assets.Add(new Computer(type, brand, model, office, purchaseDate, price, currency, localPrice));
 }
 
+void ShowList()
+{
+    Console.WriteLine("Type".PadRight(15) + "Brand".PadRight(15) + "Model".PadRight(15) + "Office".PadRight(15) + "Purchase Date".PadRight(15) + "Price in USD".PadRight(15) + "Currency".PadRight(15) + "Local price today");
+    Console.WriteLine("----".PadRight(15) + "-----".PadRight(15) + "-----".PadRight(15) + "------".PadRight(15) + "-------------".PadRight(15) + "------------".PadRight(15) + "--------".PadRight(15) + "-----------------");
+
+    List<Assets> sortedAssets = assets.OrderBy(asset => asset.Office).ToList();
+
+    foreach (Assets asset in sortedAssets)
+    {
+        Console.WriteLine(asset.Type.PadRight(15) + asset.Brand.PadRight(15) + asset.Model.PadRight(15) + asset.Office.PadRight(15) + asset.PurchaseDate.ToString().PadRight(15) + asset.Price.ToString().PadRight(15) + asset.Currency.ToUpper().PadRight(15) + asset.LocalPrice);
+
+    }
+
+    ShowMainMenu();
+}
+
 void AddNewAsset()
 {
-    Console.WriteLine("Select Type: \"P\" for Phone or \"C\" for Computer");
-    string option = Console.ReadLine();
+    ShowAddAssetMenu();
 
-    if (option.ToLower().Trim() == "p")
+    while (showAssetMenuAgain)
     {
-        CreateNewPhone();
-    }
-    else if (option.ToLower().Trim() == "c")
-    {
-        CreateNewComputer();
-    }
-    else
-    {
-        Console.WriteLine("Not a valid option");
+        switch (option.ToLower().Trim())
+        {
+            case ("p"):
+                CreateNewPhone();
+                break;
+
+            case ("s"):
+                CreateNewComputer();
+                break;
+
+            case ("q"):
+                ShowMainMenu();
+                break;
+
+            default:
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Not a valid option");
+                Console.ResetColor();
+                ShowAddAssetMenu();
+                break;
+        }
     }
 }
 
+ShowMainMenu();
 
-AddNewAsset();
-Console.WriteLine("Type".PadRight(15) + "Brand".PadRight(15) + "Model".PadRight(15) + "Office".PadRight(15) + "Purchase Date".PadRight(15) + "Price in USD".PadRight(15) + "Currency".PadRight(15) + "Local price today");
-Console.WriteLine("----".PadRight(15) + "-----".PadRight(15) + "-----".PadRight(15) + "------".PadRight(15) + "-------------".PadRight(15) + "------------".PadRight(15) + "--------".PadRight(15) + "-----------------");
-
-foreach (Assets asset in assets)
+while (showMainMenuAgain)
 {
-    Console.WriteLine(asset.Type.PadRight(15) + asset.Brand.PadRight(15) + asset.Model.PadRight(15) + asset.Office.PadRight(15) + asset.PurchaseDate.ToString().PadRight(15) + asset.Price.ToString().PadRight(15) + asset.Currency.ToUpper().PadRight(15) + asset.LocalPrice);
-
+    switch (mainMenuOption.ToLower().Trim())
+    {
+        case "n":
+            showAssetMenuAgain = true;
+            AddNewAsset();
+            break;
+        case "l":
+            ShowList();
+            break;
+        case "q":
+            showMainMenuAgain = false;
+            break;
+    }
 }
+
+
+//Console.WriteLine("Type".PadRight(15) + "Brand".PadRight(15) + "Model".PadRight(15) + "Office".PadRight(15) + "Purchase Date".PadRight(15) + "Price in USD".PadRight(15) + "Currency".PadRight(15) + "Local price today");
+//Console.WriteLine("----".PadRight(15) + "-----".PadRight(15) + "-----".PadRight(15) + "------".PadRight(15) + "-------------".PadRight(15) + "------------".PadRight(15) + "--------".PadRight(15) + "-----------------");
+
+//foreach (Assets asset in assets)
+//{
+//    Console.WriteLine(asset.Type.PadRight(15) + asset.Brand.PadRight(15) + asset.Model.PadRight(15) + asset.Office.PadRight(15) + asset.PurchaseDate.ToString().PadRight(15) + asset.Price.ToString().PadRight(15) + asset.Currency.ToUpper().PadRight(15) + asset.LocalPrice);
+
+//}
 
 Console.ReadLine();
 
