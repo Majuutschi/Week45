@@ -23,7 +23,8 @@ void ShowMainMenu()
 {
     Console.WriteLine("Asset Tracking Menu");
     Console.WriteLine("To Add a New Asset - enter \"N\"");
-    Console.WriteLine("To See Asset List - enter \"L\"");
+    Console.WriteLine("To See Asset List Sorted By Type - enter \"T\"");
+    Console.WriteLine("To See Asset List Sorted By Office - enter \"O\"");
     Console.WriteLine("To Exit - enter \"Q\"");
     mainMenuOption = Console.ReadLine();
 }
@@ -157,14 +158,14 @@ void CreateNewComputer()
     ShowAddAssetMenu();
 }
 
-void ShowList()
+void ShowListByOffice()
 {
     Console.WriteLine("Type".PadRight(15) + "Brand".PadRight(15) + "Model".PadRight(15) + "Office".PadRight(15) + "Purchase Date".PadRight(15) + "Price in USD".PadRight(15) + "Currency".PadRight(15) + "Local price today");
     Console.WriteLine("----".PadRight(15) + "-----".PadRight(15) + "-----".PadRight(15) + "------".PadRight(15) + "-------------".PadRight(15) + "------------".PadRight(15) + "--------".PadRight(15) + "-----------------");
 
-    List<Assets> sortedAssets = assets.OrderBy(asset => asset.Office).ThenBy(asset => Convert.ToDateTime(asset.PurchaseDate)).ToList();
+    List<Assets> sortedByOffice = assets.OrderBy(asset => asset.Office).ThenBy(asset => Convert.ToDateTime(asset.PurchaseDate)).ToList();
 
-    foreach (Assets asset in sortedAssets)
+    foreach (Assets asset in sortedByOffice)
     {
         DateTime today = DateTime.Now;
         DateTime pDate = Convert.ToDateTime(asset.PurchaseDate);
@@ -187,7 +188,41 @@ void ShowList()
         {
             Console.WriteLine(asset.Type.PadRight(15) + asset.Brand.PadRight(15) + asset.Model.PadRight(15) + asset.Office.PadRight(15) + asset.PurchaseDate.ToString().PadRight(15) + asset.Price.ToString().PadRight(15) + asset.Currency.ToUpper().PadRight(15) + asset.LocalPrice);
         }
-        
+    }
+
+    ShowMainMenu();
+}
+
+void ShowListByType()
+{
+    Console.WriteLine("Type".PadRight(15) + "Brand".PadRight(15) + "Model".PadRight(15) + "Office".PadRight(15) + "Purchase Date".PadRight(15) + "Price in USD".PadRight(15) + "Currency".PadRight(15) + "Local price today");
+    Console.WriteLine("----".PadRight(15) + "-----".PadRight(15) + "-----".PadRight(15) + "------".PadRight(15) + "-------------".PadRight(15) + "------------".PadRight(15) + "--------".PadRight(15) + "-----------------");
+
+    List<Assets> sortedByType = assets.OrderBy(asset => asset.Type).ThenBy(asset => Convert.ToDateTime(asset.PurchaseDate)).ToList();
+
+    foreach (Assets asset in sortedByType)
+    {
+        DateTime today = DateTime.Now;
+        DateTime pDate = Convert.ToDateTime(asset.PurchaseDate);
+        TimeSpan diff = today - pDate;
+        double years = diff.Days / 365.25;
+
+        if (years >= 3.75)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(asset.Type.PadRight(15) + asset.Brand.PadRight(15) + asset.Model.PadRight(15) + asset.Office.PadRight(15) + asset.PurchaseDate.ToString().PadRight(15) + asset.Price.ToString().PadRight(15) + asset.Currency.ToUpper().PadRight(15) + asset.LocalPrice);
+            Console.ResetColor();
+        }
+        else if (years >= 3.5)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(asset.Type.PadRight(15) + asset.Brand.PadRight(15) + asset.Model.PadRight(15) + asset.Office.PadRight(15) + asset.PurchaseDate.ToString().PadRight(15) + asset.Price.ToString().PadRight(15) + asset.Currency.ToUpper().PadRight(15) + asset.LocalPrice);
+            Console.ResetColor();
+        }
+        else
+        {
+            Console.WriteLine(asset.Type.PadRight(15) + asset.Brand.PadRight(15) + asset.Model.PadRight(15) + asset.Office.PadRight(15) + asset.PurchaseDate.ToString().PadRight(15) + asset.Price.ToString().PadRight(15) + asset.Currency.ToUpper().PadRight(15) + asset.LocalPrice);
+        }
     }
 
     ShowMainMenu();
@@ -235,9 +270,14 @@ void MainMenu()
                 showAssetMenuAgain = true;
                 AddNewAsset();
                 break;
-            case "l":
-                ShowList();
+            case "o":
+                ShowListByOffice();
                 break;
+
+            case "t":
+                ShowListByType();
+                break;
+
             case "q":
                 showMainMenuAgain = false;
                 break;
