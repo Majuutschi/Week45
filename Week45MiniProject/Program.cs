@@ -6,12 +6,13 @@ bool showMainMenuAgain = true;
 string option = "";
 bool showAssetMenuAgain = true;
 
-
+// Some assets to the list
 Assets p1 = new Phone("Phone", "Iphone", "8", "Spain", "12/29/2018", 970, "EUR", 801.65);
 Assets c1 = new Computer("Computer", "HP", "Elitebook", "Spain", "06/01/2019", 1423, "EUR", 1176.03);
 Assets p2 = new Phone("Phone", "Iphone", "11", "USA", "09/25/2020", 990, "USD", 990);
 Assets p3 = new Phone("Phone", "Iphone", "X", "Sweden", "07/15/2018", 1245, "SEK", 10375);
 
+// Create the list
 List<Assets> assets = new List<Assets>();
 assets.Add(p1);
 assets.Add(c1);
@@ -19,9 +20,12 @@ assets.Add(p2);
 assets.Add(p3);
 
 
+// Main menu 
 void ShowMainMenu()
 {
+    Console.WriteLine("------------------------------------------");
     Console.WriteLine("Asset Tracking Menu");
+    Console.WriteLine("------------------------------------------");
     Console.WriteLine("To Add a New Asset - enter \"N\"");
     Console.WriteLine("To See Asset List Sorted By Type - enter \"T\"");
     Console.WriteLine("To See Asset List Sorted By Office - enter \"O\"");
@@ -29,13 +33,17 @@ void ShowMainMenu()
     mainMenuOption = Console.ReadLine();
 }
 
+// Asset menu
 void ShowAddAssetMenu()
 {
+    Console.WriteLine("------------------------------------------");
     Console.WriteLine("Add New Asset");
+    Console.WriteLine("------------------------------------------");
     Console.WriteLine("Select Type: \"P\" for Phone, \"C\" for Computer or \"Q\" to Exit");
     option = Console.ReadLine();
 }
 
+// Add New Phone to List
 void CreateNewPhone()
 {
     string type = "Phone";
@@ -48,7 +56,7 @@ void CreateNewPhone()
 
     Console.WriteLine("Enter Purchase Date (MM/DD/YYYY):");
     string purchaseDate = Console.ReadLine();
-    Regex dateFormat = new Regex(@"(([0-1][0-2])\/([0-3][0-9])\/\d{4})");
+    Regex dateFormat = new Regex(@"(([0-1][0-9])\/([0-3][0-9])\/\d{4})");
     if (!dateFormat.IsMatch(purchaseDate))
     {
         Console.ForegroundColor = ConsoleColor.Red;
@@ -91,13 +99,12 @@ void CreateNewPhone()
             AddNewAsset();
         }
 
-
     assets.Add(new Phone(type, brand, model, office, purchaseDate, price, currency, localPrice));
 
     ShowAddAssetMenu();
 }
 
-
+// Add New Computer to List
 void CreateNewComputer()
 {
     string type = "Computer";
@@ -110,8 +117,8 @@ void CreateNewComputer()
 
     Console.WriteLine("Enter Purchase Date (MM/DD/YYYY):");
     string purchaseDate = Console.ReadLine();
-    Regex dateFormat = new Regex(@"(([0-1][0-2])\/([0-3][0-9])\/\d{4})");
-    if (dateFormat.IsMatch(purchaseDate))
+    Regex dateFormat = new Regex(@"(([0-1][0-9])\/([0-3][0-9])\/\d{4})");
+    if (!dateFormat.IsMatch(purchaseDate))
     {
         Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine("Wrong Date Format");
@@ -158,6 +165,7 @@ void CreateNewComputer()
     ShowAddAssetMenu();
 }
 
+// List Sorted by Office
 void ShowListByOffice()
 {
     Console.WriteLine("Type".PadRight(15) + "Brand".PadRight(15) + "Model".PadRight(15) + "Office".PadRight(15) + "Purchase Date".PadRight(15) + "Price in USD".PadRight(15) + "Currency".PadRight(15) + "Local price today");
@@ -193,6 +201,7 @@ void ShowListByOffice()
     ShowMainMenu();
 }
 
+// List Sorted by Type
 void ShowListByType()
 {
     Console.WriteLine("Type".PadRight(15) + "Brand".PadRight(15) + "Model".PadRight(15) + "Office".PadRight(15) + "Purchase Date".PadRight(15) + "Price in USD".PadRight(15) + "Currency".PadRight(15) + "Local price today");
@@ -228,6 +237,7 @@ void ShowListByType()
     ShowMainMenu();
 }
 
+// Asset Menu Options
 void AddNewAsset()
 {
     ShowAddAssetMenu();
@@ -240,7 +250,7 @@ void AddNewAsset()
                 CreateNewPhone();
                 break;
 
-            case ("s"):
+            case ("c"):
                 CreateNewComputer();
                 break;
 
@@ -258,6 +268,7 @@ void AddNewAsset()
     }
 }
 
+// Main Menu Options
 void MainMenu()
 {
     ShowMainMenu();
@@ -279,15 +290,23 @@ void MainMenu()
                 break;
 
             case "q":
-                showMainMenuAgain = false;
+                Environment.Exit(0);
+                break;
+
+            default:
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Not a valid option");
+                Console.ResetColor();
+                ShowMainMenu();
                 break;
         }
     }
 }
 
+// Call the Main Menu the first time
 MainMenu();
 
-Console.ReadLine();
+
 
 class Assets
 {
