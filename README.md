@@ -1,3 +1,3 @@
 # Week45
 
-Assets List
+Console app for adding assets to list
