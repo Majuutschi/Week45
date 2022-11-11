@@ -56,7 +56,7 @@ void CreateNewPhone()
 
     Console.WriteLine("Enter Purchase Date (MM/DD/YYYY):");
     string purchaseDate = Console.ReadLine();
-    Regex dateFormat = new Regex(@"(([0-1][0-9])\/([0-3][0-9])\/\d{4})");
+    Regex dateFormat = new Regex(@"((([0][1-9])|([1][0-2]))\/(([0-2][0-9])|([3][0-1]))\/([1-2][0,1,9][0-9][0-9]))$");
     if (!dateFormat.IsMatch(purchaseDate))
     {
         Console.ForegroundColor = ConsoleColor.Red;
@@ -117,7 +117,7 @@ void CreateNewComputer()
 
     Console.WriteLine("Enter Purchase Date (MM/DD/YYYY):");
     string purchaseDate = Console.ReadLine();
-    Regex dateFormat = new Regex(@"(([0-1][0-9])\/([0-3][0-9])\/\d{4})");
+    Regex dateFormat = new Regex(@"((([0][1-9])|([1][0-2]))\/(([0-2][0-9])|([3][0-1]))\/([1-2][0,1,9][0-9][0-9]))$");
     if (!dateFormat.IsMatch(purchaseDate))
     {
         Console.ForegroundColor = ConsoleColor.Red;
